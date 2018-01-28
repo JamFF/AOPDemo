@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * 描述：标志需要进行用户行为统计
- * 作者：sam.fu
+ * 作者：JamFF
  * 创建时间：2017/4/15 16:30
  */
 @Retention(RetentionPolicy.RUNTIME)
