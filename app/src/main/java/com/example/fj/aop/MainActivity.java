@@ -15,7 +15,7 @@ import butterknife.OnClick;
 
 public class MainActivity extends Activity {
 
-    private static final String TAG = "sam";
+    private static final String TAG = "JamFF";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

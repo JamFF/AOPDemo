@@ -24,7 +24,7 @@ public class BehaviorAspect {
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
 
-    private static final String TAG = "sam";
+    private static final String TAG = "JamFF";
 
     // 这个切面，由哪些方法组成，* *(..)代表任意类的任意方法任意无限参数
     // 不需要实现，只是个标记，定义切面
