@@ -1,10 +1,9 @@
 package com.example.fj.aop;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.fj.aop.annotation.BehaviorTrace;
 
@@ -12,19 +11,22 @@ import java.util.Random;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "JamFF";
+
+    private Unbinder mBinder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        mBinder = ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.bt_shake, R.id.bt_audio, R.id.bt_video, R.id.bt_jump})
+    @OnClick({R.id.bt_shake, R.id.bt_audio, R.id.bt_video})
     void onClick(View view) {
         switch (view.getId()) {
 
@@ -38,10 +40,6 @@ public class MainActivity extends Activity {
 
             case R.id.bt_video:
                 mVideo();
-                break;
-
-            case R.id.bt_jump:
-                Toast.makeText(this, "跳转", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -80,5 +78,11 @@ public class MainActivity extends Activity {
         // long duration = System.currentTimeMillis() - begin;
 
         // Log.d(TAG, "视频通话功能，耗时:" + duration);
+    }
+
+    @Override
+    protected void onDestroy() {
+        mBinder.unbind();
+        super.onDestroy();
     }
 }

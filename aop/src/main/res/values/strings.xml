@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">aop</string>
+    <string name="read_file">读取文件</string>
+    <string name="write_file">写入文件</string>
+    <string name="do_something">干一些事</string>
+    <string name="stop_thread">停止线程</string>
+</resources>
