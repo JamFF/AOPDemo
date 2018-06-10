@@ -16,28 +16,35 @@
 ## 两种方式
 
 1.LTW Load Time Weaver
+
     加载期间 类加载 动态代理
 
 2.CTW Compile Time Weaver
+
     编译时注入 APT、操作字节码(ASM)
 
 ## AspectJ介绍
-.java通过javac编译为.class
-.class再通过AspectJ(编译器)对.class修改注入、生成
+第一步.java通过javac编译为.class
+
+第二步.class再通过AspectJ(编译器)对.class修改注入、生成
 
 ## AspectJ的使用步骤
 
 1.使用AspectJ的编译器
 
 ```groovy
+// 编译脚本，这里配置的东西是给gradle用的
 buildscript {
+    // 仓库
     repositories {
+        // 从maven取得依赖组件
         mavenCentral()
     }
+    // 依赖
     dependencies {
-        // 使用aspectj的编译器
-        classpath 'org.aspectj:aspectjtools:1.8.10'
-        classpath 'org.aspectj:aspectjweaver:1.8.10'
+        // 使用AspectJ的编译器
+        classpath 'org.aspectj:aspectjtools:1.9.1'
+        classpath 'org.aspectj:aspectjweaver:1.9.1'
     }
 }
 ```
@@ -47,7 +54,7 @@ buildscript {
 ```groovy
 dependencies {
     // aspectj的jar包
-    compile 'org.aspectj:aspectjrt:1.8.10'
+    implementation 'org.aspectj:aspectjrt:1.9.1'
 }
 ```
 
@@ -58,47 +65,58 @@ import org.aspectj.bridge.IMessage
 import org.aspectj.bridge.MessageHandler
 import org.aspectj.tools.ajc.Main
 
+// project代表当前这个文件，logger是日志组件
 final def log = project.logger
+// 变体
 final def variants = project.android.applicationVariants
+// 遍历变体
+variants.all {
+    variant ->
+        if (!variant.buildType.isDebuggable()) {
+            log.debug("Skipping non-debuggable build type '${variant.buildType.name}'.")
+            return
+        }
+        // 拿到Java编译任务
+        JavaCompile javaCompile = variant.javaCompile
+        // 在Java编译之后执行
+        javaCompile.doLast {
+            // 录入参数
+            String[] args = ["-showWeaveInfo",
+                             // 版本
+                             "-1.8",
+                             // 采集所有class文件的路径
+                             "-inpath", javaCompile.destinationDir.toString(),
+                             // AspectJ编译器的classpath
+                             "-aspectpath", javaCompile.classpath.asPath,
+                             // 输出目录，AspectJ处理完成后的输出目录
+                             "-d", javaCompile.destinationDir.toString(),
+                             // Java程序的类查找路径
+                             "-classpath", javaCompile.classpath.asPath,
+                             // 覆盖引导类的位置，android中使用android.jar而不是jdk
+                             "-bootclasspath", project.android.bootClasspath.join(File.pathSeparator)]
+            log.debug "ajc args: " + Arrays.toString(args)
 
-variants.all { variant ->
-    if (!variant.buildType.isDebuggable()) {
-        log.debug("Skipping non-debuggable build type '${variant.buildType.name}'.")
-        return;
-    }
-
-    JavaCompile javaCompile = variant.javaCompile
-    javaCompile.doLast {
-        String[] args = ["-showWeaveInfo",
-                         "-1.8",
-                         "-inpath", javaCompile.destinationDir.toString(),
-                         "-aspectpath", javaCompile.classpath.asPath,
-                         "-d", javaCompile.destinationDir.toString(),
-                         "-classpath", javaCompile.classpath.asPath,
-                         "-bootclasspath", project.android.bootClasspath.join(File.pathSeparator)]
-        log.debug "ajc args: " + Arrays.toString(args)
-
-        MessageHandler handler = new MessageHandler(true);
-        new Main().run(args, handler);
-        for (IMessage message : handler.getMessages(null, true)) {
-            switch (message.getKind()) {
-                case IMessage.ABORT:
-                case IMessage.ERROR:
-                case IMessage.FAIL:
-                    log.error message.message, message.thrown
-                    break;
-                case IMessage.WARNING:
-                    log.warn message.message, message.thrown
-                    break;
-                case IMessage.INFO:
-                    log.info message.message, message.thrown
-                    break;
-                case IMessage.DEBUG:
-                    log.debug message.message, message.thrown
-                    break;
+            MessageHandler handler = new MessageHandler(true)
+            new Main().run(args, handler)
+            for (IMessage message : handler.getMessages(null, true)) {
+                switch (message.getKind()) {
+                    case IMessage.ABORT:
+                    case IMessage.ERROR:
+                    case IMessage.FAIL:
+                        log.error message.message, message.thrown
+                        break
+                    case IMessage.WARNING:
+                        log.warn message.message, message.thrown
+                        break
+                    case IMessage.INFO:
+                        log.info message.message, message.thrown
+                        break
+                    case IMessage.DEBUG:
+                        log.debug message.message, message.thrown
+                        break
+                }
             }
         }
-    }
 }
 ```
 

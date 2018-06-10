@@ -34,6 +34,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 /*
 因为上面是
@@ -65,7 +69,7 @@ project.android.applicationVariants.all {
                 "-aspectpath", javaCompile.classpath.asPath,
                 // 输出目录，AspectJ处理完成后的输出目录
                 "-d", javaCompile.destinationDir.toString(),
-                // java程序的类查找路径
+                // Java程序的类查找路径
                 "-classpath", javaCompile.classpath.asPath,
                 // 覆盖引导类的位置，android中使用android.jar而不是jdk
                 "-bootclasspath", project.android.bootClasspath.join(File.pathSeparator)]
