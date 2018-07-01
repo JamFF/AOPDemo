@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Thread</string>
+    <string name="read_file">AOP读取文件</string>
+    <string name="write_file">AOP写入文件</string>
+    <string name="do_something">Rx干一些事</string>
+    <string name="stop_thread">停止全部线程</string>
+</resources>

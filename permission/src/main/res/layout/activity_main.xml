@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/bt_all"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="申请manifest中的权限"/>
+
+    <Button
+        android:id="@+id/bt_all_exclude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="申请manifest中的权限，剔除相机权限"/>
+
+    <Button
+        android:id="@+id/bt_one_permission"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="请求写入权限，一个权限"/>
+
+    <Button
+        android:id="@+id/bt_two_permission"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="请求相机和电话，两个权限"/>
+
+    <Button
+        android:id="@+id/bt_request_200"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="请求定位，回调值200"/>
+
+    <Button
+        android:id="@+id/bt_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="service请求权限"/>
+
+    <FrameLayout
+        android:id="@+id/frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</LinearLayout>

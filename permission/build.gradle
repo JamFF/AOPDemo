@@ -1,0 +1,92 @@
+apply plugin: 'com.android.application'
+
+/***************************************aspectj***************************************/
+// 编译脚本，这里配置的东西是给gradle用的
+buildscript {
+    // 仓库
+    repositories {
+        // 从maven取得依赖组件
+        mavenCentral()
+    }
+    // 依赖
+    dependencies {
+        // 引入AspectJ的编译器
+        classpath 'org.aspectj:aspectjtools:1.9.1'
+    }
+}
+/***************************************aspectj***************************************/
+
+android {
+    compileSdkVersion 27
+
+    defaultConfig {
+        applicationId "com.jamff.permission"
+        minSdkVersion 19
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+/***************************************aspectj***************************************/
+import org.aspectj.tools.ajc.Main
+
+/*
+因为上面是
+android {
+    ...
+}
+所以这里是project.android
+
+因为apply plugin: 'com.android.application'是application
+所以这里是applicationVariants
+
+如果是apply plugin: 'com.android.library'，要改为libraryVariants
+
+.all是拿到两个变体，一个是debug一个是release
+*/
+project.android.applicationVariants.all {
+    // it代表了debug或者release
+    JavaCompile javaCompile = it.javaCompile
+    // 编译任务执行完成之后 工作
+    javaCompile.doLast {
+        // 这里已经编译出来.class文件了
+        String[] args = [
+                // 使用Java8
+                "-1.8",
+                // AspectJ处理的源文件，也就是.class
+                // destinationDir目录是aop\build\intermediates\classes
+                "-inpath", javaCompile.destinationDir.toString(),
+                // AspectJ编译器的classpath
+                "-aspectpath", javaCompile.classpath.asPath,
+                // 输出目录，AspectJ处理完成后的输出目录
+                "-d", javaCompile.destinationDir.toString(),
+                // Java程序的类查找路径
+                "-classpath", javaCompile.classpath.asPath,
+                // 覆盖引导类的位置，android中使用android.jar而不是jdk
+                "-bootclasspath", project.android.bootClasspath.join(File.pathSeparator)]
+
+        // 调用执行AspectJ编译器
+        new Main().runMain(args, false)
+    }
+}
+/***************************************aspectj***************************************/
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'org.aspectj:aspectjrt:1.9.1'
+    implementation project(':lib-permission')
+}
