@@ -5,14 +5,14 @@ apply plugin: 'com.android.application'
 buildscript {
     // 仓库
     repositories {
-        // 从maven取得依赖组件
-        mavenCentral()
+        // 从jcenter取得依赖组件
+        jcenter()
     }
     // 依赖
     dependencies {
-        // 使用AspectJ的编译器
+        // 引入AspectJ的编译器
         classpath 'org.aspectj:aspectjtools:1.9.1'
-        // 尝试发现，不引入aspectjweaver也可以
+        // 没有使用到该功能，可以不引入weaver
         // classpath 'org.aspectj:aspectjweaver:1.9.1'
     }
 }
@@ -33,10 +33,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 }
 
 /***************************************aspectj***************************************/
@@ -48,7 +44,7 @@ import org.aspectj.tools.ajc.Main
 final def log = project.logger
 // 变体
 final def variants = project.android.applicationVariants
-// 遍历变体
+// 在构建工程，执行编译时遍历变体
 variants.all {
     variant ->
         if (!variant.buildType.isDebuggable()) {
@@ -61,8 +57,8 @@ variants.all {
         javaCompile.doLast {
             // 录入参数
             String[] args = ["-showWeaveInfo",
-                             // 版本
-                             "-1.8",
+                             // aspectj的版本
+                             "-1.9",
                              // 采集所有class文件的路径
                              "-inpath", javaCompile.destinationDir.toString(),
                              // AspectJ编译器的classpath

@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void writeFile() {
         Log.d(TAG, "Write File: " + Thread.currentThread());
         try {
-            Thread.sleep(5_000);
+            Thread.sleep(3_000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void readFile() {
         Log.d(TAG, "Read File: " + Thread.currentThread());
         try {
-            Thread.sleep(5_000);
+            Thread.sleep(3_000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Completable.create(emitter -> {
             Log.d(TAG, "Do Something subscribe: " + Thread.currentThread());
             try {
-                Thread.sleep(5_000);
+                Thread.sleep(3_000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

@@ -10,48 +10,78 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 /**
- * 描述：用户行为统计的切面
- * 作者：JamFF
- * 创建时间：2017/4/15 16:42
+ * description: 切面
+ * author: FF
+ * time: 2019-07-02 16:26
  */
 @Aspect
 public class BehaviorAspect {
 
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
-
     private static final String TAG = "JamFF";
 
-    // 这个切面，由哪些方法组成，* *(..)代表任意类的任意方法任意无限参数
-    // 不需要实现，只是个标记，定义切面
+    // @Pointcut 标记切入点，方法名随意，但是要与下面@Around中的保持一直，方法空实现就可以
+    // 格式：@Pointcut("execution(@注解全类名 表达式)")
+    // 表达式用来指定使用注解的地方，哪个类的哪个方法
+    // 表达式 * *(..) 的含义：第一个*任意类，第二个*任意方法，(..)任意参数
     @Pointcut("execution(@com.example.fj.aop.annotation.BehaviorTrace * *(..))")
-    public void methodAnnotatedWithBehaviorTrace() {}
+    public void methodAnnotatedWithBehaviorTrace() {
+    }
 
-    // @Before("methodAnnotatedWithBehaviorTrace()")// 执行前调用
-    // @After("methodAnnotatedWithBehaviorTrace()")// 执行后调用
-    @Around("methodAnnotatedWithBehaviorTrace()")// 执行前后调用
-    public Object waveJoinPoint(ProceedingJoinPoint joinPoint) throws Throwable {
+    // @Before 执行切入点前调用
+    // 参数JoinPoint是连接点，可以通过其获取注解参数和使用注解的方法信息
+    // 如果不需要获取这些信息，可以省略JoinPoint参数
+    /*@Before("methodAnnotatedWithBehaviorTrace()")
+    public void beforeJoinPoint(JoinPoint joinPoint) throws Throwable {
 
-        // 获取注解上的功能名称
+        // 获取连接点的签名
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        // 获取类名
+        String className = signature.getDeclaringType().getSimpleName();
+        // 获取方法名
+        String methodName = signature.getName();
+        // 获取参数列表
+        List<Object> args = Arrays.asList(joinPoint.getArgs());
+
+        // 获取注解实例
+        BehaviorTrace behaviorTrace = signature.getMethod().getAnnotation(BehaviorTrace.class);
+        // 获取注解中的值
+        String funcName = behaviorTrace.value();
+
+        Log.d(TAG, String.format("@Before %s类的%s方法，参数%s，功能：%s",
+                className, methodName, args, funcName));
+    }*/
+
+    // @After 执行切入点后调用，使用方式与 @Before 一致
+    // 这里使用无参的方式
+    /*@After("methodAnnotatedWithBehaviorTrace()")
+    public void afterJoinPoint() throws Throwable {
+        Log.d(TAG, "@After ");
+    }*/
+
+    // @Around 在切入点前后都加入代码
+    // 该模式下，参数必须存在，并且为ProceedingJoinPoint类型，必须有返回值
+    @Around("methodAnnotatedWithBehaviorTrace()")
+    public Object aroundJoinPoint(ProceedingJoinPoint joinPoint) throws Throwable {
+
+        Log.d(TAG, "@Around: start");
+
+        // 获取连接点的签名
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
+        // 获取注解实例
         BehaviorTrace behaviorTrace = methodSignature.getMethod().getAnnotation(BehaviorTrace.class);
+        // 获取注解中的值
         String funcName = behaviorTrace.value();
 
         long begin = System.currentTimeMillis();
 
-        // 调用该方法才会执行@BehaviorTrace("xxx")方法内的代码
+        // 执行BehaviorTrace注解的方法内的代码
         Object ret = joinPoint.proceed();
 
         long duration = System.currentTimeMillis() - begin;
 
-        String time = sdf.format(new Date());
+        Log.d(TAG, String.format("@Around: end 功能：%s执行，耗时：%d", funcName, duration));
 
-        Log.d(TAG, String.format("时间：%s，功能：%s执行，耗时：%d", time, funcName, duration));
-
-        return ret;
+        return ret;// 注意返回值
     }
 }

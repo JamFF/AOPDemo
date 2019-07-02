@@ -6,13 +6,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 描述：标志需要进行用户行为统计
- * 作者：JamFF
- * 创建时间：2017/4/15 16:30
+ * description: 定义注解，用来标记切入点
+ * author: FF
+ * time: 2019-07-02 15:45
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface BehaviorTrace {
-
     String value();
 }

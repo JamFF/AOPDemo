@@ -11,13 +11,15 @@
     buildscript {
         // 仓库
         repositories {
-            // 从maven取得依赖组件
-            mavenCentral()
+            // 从jcenter取得依赖组件
+            jcenter()
         }
         // 依赖
         dependencies {
             // 使用AspectJ的编译器
             classpath 'org.aspectj:aspectjtools:1.9.1'
+            // 没有使用到该功能，可以不引入weaver
+            // classpath 'org.aspectj:aspectjweaver:1.9.1'
         }
     }
     ```
@@ -52,14 +54,14 @@
     project.android.applicationVariants.all {
         // it代表了debug或者release
         JavaCompile javaCompile = it.javaCompile
-        // 编译任务执行完成之后 工作
+        // 编译任务执行完成之后工作
         javaCompile.doLast {
             // 这里已经编译出来.class文件了
             String[] args = [
-                    // 使用Java8
-                    "-1.8",
+                    // aspectj的版本
+                    "-1.9",
                     // AspectJ处理的源文件，也就是.class
-                    // destinationDir目录是aop\build\intermediates\classes
+                    // destinationDir目录是build/intermediates/javac/debug/compileDebugJavaWithJavac/classes
                     "-inpath", javaCompile.destinationDir.toString(),
                     // AspectJ编译器的classpath
                     "-aspectpath", javaCompile.classpath.asPath,

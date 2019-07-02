@@ -3,6 +3,7 @@ package com.example.fj.aop;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.example.fj.aop.annotation.BehaviorTrace;
@@ -29,17 +30,14 @@ public class MainActivity extends AppCompatActivity {
     @OnClick({R.id.bt_shake, R.id.bt_audio, R.id.bt_video})
     void onClick(View view) {
         switch (view.getId()) {
-
             case R.id.bt_shake:
                 mShake();
                 break;
-
             case R.id.bt_audio:
-                mAudio();
+                mAudio(1);
                 break;
-
             case R.id.bt_video:
-                mVideo();
+                mVideo(1, 2);
                 break;
         }
     }
@@ -48,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private void mShake() {
         // long begin = System.currentTimeMillis();
 
+        Log.d(TAG, "mShake: ");
         // 模拟网络延迟
         SystemClock.sleep(new Random().nextInt(3000));
 
@@ -57,9 +56,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @BehaviorTrace("语音消息")
-    private void mAudio() {
+    private void mAudio(int i) {
         // long begin = System.currentTimeMillis();
 
+        Log.d(TAG, "mAudio: ");
         // 模拟网络延迟
         SystemClock.sleep(new Random().nextInt(3000));
 
@@ -69,9 +69,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @BehaviorTrace("视频通话")
-    private void mVideo() {
+    private void mVideo(int i, int j) {
         // long begin = System.currentTimeMillis();
 
+        Log.d(TAG, "mVideo: ");
         // 模拟网络延迟
         SystemClock.sleep(new Random().nextInt(3000));
 
