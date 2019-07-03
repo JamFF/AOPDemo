@@ -11,7 +11,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 
 /**
- * description: 切面
+ * description: 统计方法执行时间切面
  * author: FF
  * time: 2019-07-02 16:26
  */

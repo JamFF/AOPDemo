@@ -2,7 +2,7 @@
 
 统计方法的耗时
 
-### 集成AspectJ
+## 配置 AspectJ 环境
 
 1. 使用AspectJ的编译器
 
@@ -98,8 +98,9 @@
             }
     }
     ```
+## 使用 AspectJ
 
-4. 添加注解类
+1. 添加注解类
 
     使用注解的目的就是为了用来标记**切入点**，可以在切面中通过表达式找到切入点。
 
@@ -127,11 +128,13 @@
     
     至于 `CLASS` 和 `RUNTIME` 的选择，就要看使用中，是否需要反射获取信息，大多情况下都需要通过注解传递一些信息，所以这里使用 `RUNTIME`。
 
-5. 使用AspectJ
+2. 编写切面
+
+    这里就是使用 AspectJ 的类。
 
     ```java
     /**
-     * description: 切面
+     * description: 统计方法执行时间切面
      * author: FF
      * time: 2019-07-02 16:26
      */
@@ -213,7 +216,9 @@
     * `@Before` 前置通知，在目标执行之前执行通知
     * `@After` 后置通知，目标执行后执行通知
     
-6. 使用注解标记
+3. 使用注解标记
+
+    被注解标记的方法，就是**切入点**。
 
     ```java
     @BehaviorTrace("摇一摇")
@@ -241,7 +246,8 @@
 2. 一个方法上只能使用一个通知注解，不然重复切入，不能确定执行结果，并且可能出现错误
 3. 虽然可以定义多个方法，使用多种通知注解，但是不推荐，在同时使用多种通知注解时，会出现不确定的执行结果
 4. 同时使用Before和After是不冲突的，但是推荐使用 `@Around` 更方便，并且便于交互
-5. 编译后，可以在 `build/intermediates/javac/debug/compileDebugJavaWithJavac/classes` 目录下找到编译后的 class 文件，会发现切入点的代码被修改了，这就是 AspectJ 帮我们做的事情
+5. 一个切入点，可以使用多个注解，让不同切面切入，见代码中 `UserInfoBehaviorTrace` 的使用
+6. 编译后，可以在 `build/intermediates/javac/debug/compileDebugJavaWithJavac/classes` 目录下找到编译后的 class 文件，会发现切入点的代码被修改了，这就是 AspectJ 帮我们做的事情
     ```java
     @BehaviorTrace("摇一摇")
     private void mShake() {

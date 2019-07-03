@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.fj.aop.annotation.BehaviorTrace;
+import com.example.fj.aop.annotation.UserInfoBehaviorTrace;
 
 import java.util.Random;
 
@@ -42,19 +43,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @BehaviorTrace("摇一摇")
-    private void mShake() {
-        // long begin = System.currentTimeMillis();
-
-        Log.d(TAG, "mShake: ");
-        // 模拟网络延迟
-        SystemClock.sleep(new Random().nextInt(3000));
-
-        // long duration = System.currentTimeMillis() - begin;
-
-        // Log.d(TAG, "摇一摇功能，耗时:" + duration);
-    }
-
+    @UserInfoBehaviorTrace
     @BehaviorTrace("语音消息")
     private void mAudio(int i) {
         // long begin = System.currentTimeMillis();
@@ -68,6 +57,21 @@ public class MainActivity extends AppCompatActivity {
         // Log.d(TAG, "语音消息功能，耗时:" + duration);
     }
 
+    @UserInfoBehaviorTrace
+    @BehaviorTrace("摇一摇")
+    private void mShake() {
+        // long begin = System.currentTimeMillis();
+
+        Log.d(TAG, "mShake: ");
+        // 模拟网络延迟
+        SystemClock.sleep(new Random().nextInt(3000));
+
+        // long duration = System.currentTimeMillis() - begin;
+
+        // Log.d(TAG, "摇一摇功能，耗时:" + duration);
+    }
+
+    @UserInfoBehaviorTrace
     @BehaviorTrace("视频通话")
     private void mVideo(int i, int j) {
         // long begin = System.currentTimeMillis();
