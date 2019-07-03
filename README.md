@@ -5,6 +5,7 @@
 1. [app：性能检测](https://github.com/JamFF/AOPDemo/tree/master/app)
 2. [thread：线程切换](https://github.com/JamFF/AOPDemo/tree/master/thread)
 3. [permission：申请动态权限](https://github.com/JamFF/AOPDemo/tree/master/permission)
+4. [proxy：动态代理实现 AOP](https://github.com/JamFF/AOPDemo/tree/master/proxy)
 
 ### AOP介绍
 

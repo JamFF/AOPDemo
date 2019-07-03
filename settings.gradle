@@ -1,1 +1,1 @@
-include ':app', ':thread', ':permission', ':lib-permission'
+include ':app', ':thread', ':permission', ':lib-permission', ':proxy'

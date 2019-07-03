@@ -272,4 +272,5 @@
 
 [AspectJ 历史版本](http://jcenter.bintray.com/org/aspectj/aspectjrt/)  
 [Android基于AOP的非侵入式监控之——AspectJ实战](https://blog.csdn.net/woshimalingyi/article/details/51476559)  
-[AspectJ 切面注解中五种通知注解：@Before、@After、@AfterRunning、@AfterThrowing、@Around](https://blog.csdn.net/u010502101/article/details/78823056)
+[AspectJ 切面注解中五种通知注解：@Before、@After、@AfterRunning、@AfterThrowing、@Around](https://blog.csdn.net/u010502101/article/details/78823056)  
+[Android面向切面编程（AOP）](https://www.jianshu.com/p/aa1112dbebc7)
