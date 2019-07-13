@@ -90,12 +90,12 @@ public class ProxyHandler implements InvocationHandler {
      * @return 返回一个代理实例
      */
     public Object getProxyInstance() {
-        // 参数1，代理类的ClassLoader
+        // 参数1，委托类的ClassLoader
         // 参数2，代理类要实现的接口，实际就是 new Class[]{ActivityManager.class}
         // 因为代理类和委托类实现的接口是一样的，所以也可以使用委托类的getInterfaces()来获取
         // 参数3，InvocationHandler 回调处理类
         return Proxy.newProxyInstance(
-                this.getClass().getClassLoader(),
+                obj.getClass().getClassLoader(),
                 obj.getClass().getInterfaces(), this);
     }
 

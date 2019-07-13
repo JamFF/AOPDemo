@@ -20,9 +20,21 @@ public class UserInfoBehaviorTraceAspect {
     public void pointcut() {
     }
 
+    // 虽然实现了，但不推荐和BehaviorAspect的@Around一起使用，两个@Around不能保证执行顺序
+    /*@Around("pointcut()")
+    public Object weaveJoinPoint(ProceedingJoinPoint joinPoint) throws Throwable {
+        if (true) {
+            Log.d(TAG, "weaveJoinPoint: 已经登录");
+            return joinPoint.proceed();
+        } else {
+            Log.d(TAG, "weaveJoinPoint: 跳转登录");
+            return null;// 不调用
+        }
+    }*/
+
+    // @Before和BehaviorAspect的@Around使用还是比较稳定
     @Before("pointcut()")
-    public Object weaveJoinPoint() {
+    public void jointPotin() {
         Log.d(TAG, "获取用户信息");
-        return null;
     }
 }

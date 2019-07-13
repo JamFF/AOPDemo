@@ -17,7 +17,7 @@
         }
         // 依赖
         dependencies {
-            // 使用AspectJ的编译器
+            // 使用AspectJ的编译器，不再使用传统的javac
             classpath 'org.aspectj:aspectjtools:1.9.1'
             // 没有使用到该功能，可以不引入weaver
             // classpath 'org.aspectj:aspectjweaver:1.9.1'
@@ -244,7 +244,7 @@
 
 1. 目前最新版本 1.9.4，最低支持 `minSdkVersion 24`
 2. 一个方法上只能使用一个通知注解，不然重复切入，不能确定执行结果，并且可能出现错误
-3. 虽然可以定义多个方法，使用多种通知注解，但是不推荐，在同时使用多种通知注解时，会出现不确定的执行结果
+3. 虽然可以定义多个方法，使用多种通知注解，但是不推荐，在同时使用多种通知注解时，会出现不确定的执行结果，例如两个 `@Around` 并不能确定执行顺序
 4. 同时使用Before和After是不冲突的，但是推荐使用 `@Around` 更方便，并且便于交互
 5. 一个切入点，可以使用多个注解，让不同切面切入，见代码中 `UserInfoBehaviorTrace` 的使用
 6. 编译后，可以在 `build/intermediates/javac/debug/compileDebugJavaWithJavac/classes` 目录下找到编译后的 class 文件，会发现切入点的代码被修改了，这就是 AspectJ 帮我们做的事情

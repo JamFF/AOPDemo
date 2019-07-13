@@ -1,5 +1,6 @@
 package com.example.fj.aop.aspect;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.example.fj.aop.annotation.BehaviorTrace;
@@ -22,19 +23,20 @@ public class BehaviorAspect {
 
     // @Pointcut 标记切入点，方法名随意，但是要与下面@Around中的保持一直，方法空实现就可以
     // 格式：@Pointcut("execution(@注解全类名 表达式)")
-    // 表达式用来指定使用注解的地方，哪个类的哪个方法
+    // execution：以方法执行时作为切点，触发Aspect类
+    // 表达式：@用来声明要找注解，全类名指定哪个注解，再后面指定了哪个类的哪个方法
     // 表达式 * *(..) 的含义：第一个*任意类，第二个*任意方法，(..)任意参数
     @Pointcut("execution(@com.example.fj.aop.annotation.BehaviorTrace * *(..))")
     public void methodAnnotatedWithBehaviorTrace() {
     }
 
-    // @Before 执行切入点前调用
+    // @Before 执行切入点前调用，方法名随意
     // 参数JoinPoint是连接点，可以通过其获取注解参数和使用注解的方法信息
     // 如果不需要获取这些信息，可以省略JoinPoint参数
     /*@Before("methodAnnotatedWithBehaviorTrace()")
-    public void beforeJoinPoint(JoinPoint joinPoint) throws Throwable {
+    public void beforeJoinPoint(JoinPoint joinPoint) {
 
-        // 获取连接点的签名
+        // 获取连接点的方法签名
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         // 获取类名
         String className = signature.getDeclaringType().getSimpleName();
@@ -52,21 +54,24 @@ public class BehaviorAspect {
                 className, methodName, args, funcName));
     }*/
 
-    // @After 执行切入点后调用，使用方式与 @Before 一致
+    // @After 执行切入点后调用，方法名随意，使用方式与 @Before 一致
     // 这里使用无参的方式
     /*@After("methodAnnotatedWithBehaviorTrace()")
-    public void afterJoinPoint() throws Throwable {
+    public void afterJoinPoint() {
         Log.d(TAG, "@After ");
     }*/
 
-    // @Around 在切入点前后都加入代码
+    // @Around 在切入点前后都加入代码，方法名可以任意取
     // 该模式下，参数必须存在，并且为ProceedingJoinPoint类型，必须有返回值
     @Around("methodAnnotatedWithBehaviorTrace()")
     public Object aroundJoinPoint(ProceedingJoinPoint joinPoint) throws Throwable {
 
         Log.d(TAG, "@Around: start");
 
-        // 获取连接点的签名
+        // 可以通过该方式获取上下文
+        Context context = (Context) joinPoint.getThis();
+
+        // 获取连接点的方法签名
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         // 获取注解实例
         BehaviorTrace behaviorTrace = methodSignature.getMethod().getAnnotation(BehaviorTrace.class);

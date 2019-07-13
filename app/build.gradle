@@ -10,7 +10,7 @@ buildscript {
     }
     // 依赖
     dependencies {
-        // 引入AspectJ的编译器
+        // 引入AspectJ的编译器，不再使用传统的javac
         classpath 'org.aspectj:aspectjtools:1.9.1'
         // 没有使用到该功能，可以不引入weaver
         // classpath 'org.aspectj:aspectjweaver:1.9.1'
