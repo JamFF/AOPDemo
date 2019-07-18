@@ -47,10 +47,11 @@ final def variants = project.android.applicationVariants
 // 在构建工程，执行编译时遍历变体
 variants.all {
     variant ->
-        if (!variant.buildType.isDebuggable()) {
+        /*if (!variant.buildType.isDebuggable()) {
+            // 只在debug下生效
             log.debug("Skipping non-debuggable build type '${variant.buildType.name}'.")
             return
-        }
+        }*/
         // 拿到Java编译任务
         JavaCompile javaCompile = variant.javaCompile
         // 在Java编译之后执行
